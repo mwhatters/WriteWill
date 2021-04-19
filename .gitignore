@@ -1,0 +1,12 @@
+backup/
+bbs/
+cdata/
+cstore/
+plates/
+config.txt
+favourites.txt
+log.txt
+sdl_controllers.txt
+activity_log.txt
+*.html
+*.js
