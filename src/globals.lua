@@ -1,3 +1,5 @@
+ timer = 0
+ 
  audio = {
    tracks = {
      intro = 0
@@ -17,4 +19,13 @@ buttons = {
   down = 3,
   z = 4,
   x = 5,
+}
+
+sprites = {
+  block = 1,
+}
+
+game_mode = {
+  intro = 1,
+  game = 2,
 }
