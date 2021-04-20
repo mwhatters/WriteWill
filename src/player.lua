@@ -3,8 +3,8 @@ player.x = 64
 player.y = 64
 player.height = 6
 player.width = 8
-player.speed_x = 3
-player.speed_y = 4
+player.speed_x = 2
+player.speed_y = 2
 player.spr = 0
 
 function player.update(self)
