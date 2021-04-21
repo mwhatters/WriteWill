@@ -29,3 +29,14 @@ game_mode = {
   intro = 1,
   game = 2,
 }
+
+flags = {
+  ground = 0,
+  jump_through = 1,
+}
+
+player_states = {
+  normal = 0,
+  slide = 1,
+  wallslide = 2,
+}
