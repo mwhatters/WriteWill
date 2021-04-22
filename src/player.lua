@@ -21,6 +21,8 @@ player.walljump_speed = 5
 
 player.gravity = 0.7
 player.on_ground = true
+player.previously_on_ground = false
+player.landing = false
 player.facing = 1
 
 player.t_jump_grace = 4
@@ -29,7 +31,15 @@ player.t_var_jump = 0
 player.var_jump_speed = 0
 
 function player.update(self)
-  on_ground = self:check_solid(0,1)
+  self.on_ground = self:check_solid(0,1)
+
+  -- landing
+  if self.on_ground and not self.previously_on_ground then
+    self.landing = true
+    sfx(audio.sounds.foot_step)
+  end
+
+  self.previously_on_ground = self.on_ground
 
   if input.move_x ~= 0 then
     self.facing = input.move_x
@@ -44,7 +54,7 @@ end
 
 function player.normal_update(self)
   local accel = 0.4
-  if on_ground then
+  if self.on_ground then
     accel = 0.7
   end
 
@@ -53,7 +63,7 @@ function player.normal_update(self)
   self.speed_y += self.gravity
   self.speed_y = min(self.speed_y, self.fall_speed)
 
-  if on_ground then
+  if self.on_ground then
     self.t_jump_grace = 4
     self.t_jump_grace_y = self.y
   else
@@ -90,9 +100,10 @@ end
 function player.jump(self)
     input:consume_jump()
     self.speed_y = self.jump_speed
+    self.y = self.t_jump_grace_y
     self.t_var_jump = 3
     self.var_jump_speed = -3
-    self.y = self.t_jump_grace_y
+    sfx(audio.sounds.jump)
 end
 
 function player.wall_jump(self, dir)
@@ -100,7 +111,9 @@ function player.wall_jump(self, dir)
   self.facing = dir
   self.speed_y = self.jump_speed
   self.speed_x = 2.5 * dir
-  -- self:move_x(dir)
+  self.t_var_jump = 3
+  self.var_jump_speed = -3
+  sfx(audio.sounds.wall_jump)
 end
 
 function player.walljump(self)
@@ -220,12 +233,19 @@ function player.draw(self)
     end
   end
 
+  local current_frame = self.animation.a[self.animation_idx]
+  if self.animation == self.a_move then
+    if current_frame == 66 then
+      sfx(audio.sounds.foot_step)
+    end
+  end
+
   -- draw
-  spr(self.animation.a[self.animation_idx], self.x, self.y, 1, 1, self.facing ~= 1)
+  spr(current_frame, self.x, self.y, 1, 1, self.facing ~= 1)
 end
 
 function player.normal_animate(self)
-  if on_ground then
+  if self.on_ground then
     if abs(self.speed_x) > 0 then
       return self.a_move
     end

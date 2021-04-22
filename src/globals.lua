@@ -8,7 +8,10 @@
      snare = 0,
      kick = 1,
      hat = 2,
-     drum_groove = 10
+     drum_groove = 10,
+     jump = 60,
+     wall_jump = 61,
+     foot_step = 62,
    },
  }
 
