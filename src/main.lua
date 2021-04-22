@@ -6,15 +6,16 @@ function _update()
   input:update()
   player:update()
   blocks:update()
-  camera(player.x - 64, player.y - 64)
+  camera(player.x - 32, player.y - 70)
 end
 
 function _draw()
-  cls(1)
+  cls(12)
+  map(0,0,0,0,128,32)
   player:draw()
   blocks:draw()
   increment_t()
-  map(0,0,0,0,128,32)
+  
 end
 
 function increment_t()
