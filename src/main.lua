@@ -1,4 +1,6 @@
+current_game_state = game_state.intro
 player_pos_y = 0
+
 function _init()
   music(audio.tracks.intro)
   player_pos_y = player.y - 70
@@ -6,30 +8,50 @@ end
 
 function _update()
   input:update()
-  player:update()
-  blocks:update()
   camera(player.x - 32, player_pos_y)
+  if current_game_state == game_state.intro then return update_intro() end
+  update_game()
 end
 
 function _draw()
+  increment_t()
+  if current_game_state == game_state.intro then return draw_intro() end
+  draw_game()
+end
+
+function update_intro()
+  if input.jump then
+    input:consume_jump()
+    current_game_state = game_state.level_1
+  end
+end
+
+t_into = 15
+t_into_orig = 15
+orig_col = 8
+
+function draw_intro()
+  cls(0)
+  spr(140, 64,64,4,4)
+
+  t_intro = max(0, t_into - 1)
+  if t_intro == 0 then
+    t_intro = t_into_orig
+  end
+end
+
+function update_game()
+  player:update()
+  blocks:update()
+end
+
+function draw_game()
   cls(12)
   map(0,0,0,0,128,32)
   player:draw()
   blocks:draw()
-  increment_t()
 end
 
 function increment_t()
   timer += 1
-end
-
-function lines_overlapping(min1,max1,min2,max2)
-  return max1 > min2 and max2 < min1
-end
-
-function rects_overlapping(left1,top1,right1,bottom1, left2,top2,right2,bottom2)
-  return lines_overlapping(left1,right1,left2,right2) and lines_overlapping(top1,bottom1,top2,bottom2)
-end
-
-function bounding_boxes_overlapping(obj1,obj2)
 end

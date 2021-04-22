@@ -18,7 +18,7 @@ player.remainder_y = 0
 
 player.move_speed = 2
 player.jump_speed = -3.5
-player.fall_speed = 2
+player.fall_speed = 3
 player.walljump_speed = 5
 
 player.gravity = 0.7

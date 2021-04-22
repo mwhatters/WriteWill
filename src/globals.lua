@@ -45,6 +45,11 @@ player_states = {
   wallslide = 2,
 }
 
+game_state = {
+  intro = 0,
+  level_1 = 1,
+}
+
 
 -- helpers
 
