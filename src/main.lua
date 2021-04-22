@@ -1,12 +1,14 @@
+player_pos_y = 0
 function _init()
   music(audio.tracks.intro)
+  player_pos_y = player.y - 70
 end
 
 function _update()
   input:update()
   player:update()
   blocks:update()
-  camera(player.x - 32, player.y - 70)
+  camera(player.x - 32, player_pos_y)
 end
 
 function _draw()
@@ -15,7 +17,6 @@ function _draw()
   player:draw()
   blocks:draw()
   increment_t()
-  
 end
 
 function increment_t()
