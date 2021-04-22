@@ -311,6 +311,7 @@ function player.move_x(self, x)
 	return false
 end
 
+-- this code (movement basics, collision) is ineloquently ripped from celeste 2 pico8
 function player.move_y(self, y, on_collide)
 	self.remainder_y += y
 	local my = flr(self.remainder_y + 0.5)
