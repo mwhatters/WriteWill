@@ -1,17 +1,23 @@
 input = {}
+input.buffer_default = 5
+
 input.move_x = 0
 input.left = false
 input.right = false
+
 input.jump = false
 input.jump_held = false
-input.buffer_default = 5
 input.jump_buffer = 0
+
+input.slide = false
+input.slide_buffer = 0
 
 function input.update(self)
   self:decrement_buffers()
   self:update_move_x()
   self.jump = self:get_jump()
   self.jump_held = btn(buttons.z)
+  self.slide = self:get_slide()
 end
 
 function input.update_move_x(self)
@@ -27,10 +33,20 @@ function input.get_jump(self)
   return self.jump_buffer > 0
 end
 
+function input.get_slide(self)
+  if btnp(buttons.x) then self.slide_buffer = self.buffer_default end
+  return self.slide_buffer > 0
+end
+
 function input.decrement_buffers(self)
   self.jump_buffer = max(0, self.jump_buffer - 1)
+  self.slide_buffer = max(0, self.slide_buffer - 1)
 end
 
 function input.consume_jump(self)
   self.jump_buffer = 0
+end
+
+function input.consume_slide(self)
+  self.slide_buffer = 0
 end
