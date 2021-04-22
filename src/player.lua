@@ -412,7 +412,7 @@ function player.draw(self)
 
   -- draw
   local offset_x = 0
-  if self.state == player_states.wallslide and self.facing == 1 then
+  if self.facing == 1 then
     offset_x = 1
   end
   
