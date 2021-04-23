@@ -13,6 +13,7 @@
      wall_jump = 61,
      foot_step = 62,
      slide = 59,
+     die = 5,
    },
  }
 
@@ -37,17 +38,31 @@ game_mode = {
 flags = {
   ground = 0,
   jump_through = 1,
+  checkpoint = 2,
 }
 
 player_states = {
   normal = 0,
   slide = 1,
   wallslide = 2,
+  dead = 99,
 }
 
 game_state = {
-  intro = 0,
-  level_1 = 1,
+  intro = {
+    level = false
+  },
+  level_1 = {
+    level = true,
+    spawn_x = 64,
+    spawn_y = 64,
+    camera_y_offset = 70,
+    camera_x_offset = 32,
+    bounds_top = 0,
+    bounds_bottom = 0,
+    bounds_left = -30,
+    bounds_right = 900,
+  },
 }
 
 

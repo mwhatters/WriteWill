@@ -2,10 +2,12 @@ player = {}
 player.state = player_states.normal
 player.next_state = player_states.normal
 
-player.x = 64
-player.y = 64
+player.x = 0
+player.y = 0
 player.spr = 64
 player.hitbox = nil
+
+player.checkpoint = nil
 
 player.speed_x = 0
 player.speed_y = 0
@@ -37,6 +39,11 @@ player.var_jump_speed = 0
 
 player.t_slide = 0
 
+function player.init(self)
+  self.x = player.spawn_x
+  self.y = player.spawn_y
+end
+
 function player.update(self)
   self.on_ground = self:check_solid(0,1)
   self:set_landing()
@@ -46,6 +53,7 @@ function player.update(self)
 
   self:state_update()
   self:move()
+  self:after_move()
 end
 
 function player.state_update(self)
@@ -55,6 +63,11 @@ function player.state_update(self)
   end
 
   self.state = self.next_state
+
+  if self.state == player_states.dead then
+    self.next_state = self:dead_update()
+    return
+  end
 
   if self.state == player_states.normal then
     self.next_state = self:normal_update()
@@ -243,6 +256,26 @@ function player.wallslide_update(self)
   return player_states.wallslide
 end
 
+player.t_dead_timer = 0
+function player.dead_update(self)
+  if self.t_dead_timer > 0 then
+    self.speed_y = 0
+    self.speed_x = 0
+    self.t_dead_timer = max(0, self.t_dead_timer - 1)
+    return player_states.dead
+  end
+
+  if self.checkpoint then
+    self.x = self.checkpoint.x
+    self.y = self.checkpoint.y
+  else
+    self.x = current_game_state.spawn_x
+    self.y = current_game_state.spawn_y
+  end
+
+  return player_states.normal
+end
+
 -- Actions
 
 function player.jump(self)
@@ -284,11 +317,38 @@ function player.wallslide_jump(self, dir)
     sfx(audio.sounds.jump)
 end
 
+function player.die(self)
+  self.state = player_states.dead
+  self.next_state = player_states.dead
+  self.t_dead_timer = 15
+  sfx(audio.sounds.die)
+end
+
 -- Movement & Collision
 
 function player.move(self)
   self:move_x(self.speed_x)
   self:move_y(self.speed_y)
+end
+
+function player.after_move(self)
+  if self.state == player_states.dead then return end
+  if current_game_state.level then
+    if player.y > camera_y + 128 + 4 then
+      player:die()
+      return
+    end
+  end
+
+  local flag = self:check(flags.checkpoint)
+  if flag then
+    sfx(audio.sounds.jump)
+    self.checkpoint = {
+      x = player.x,
+      y = player.y,
+    }
+    fset(flag.spr, 0)
+  end
 end
 
 function player.move_x(self, x)	
@@ -351,6 +411,23 @@ function player.check_solid(self, ox, oy)
 		for j = tile_y(oy + self.y + self.hit_y),tile_y(oy + self.y + self.hit_y + self.hit_h - 1) do
 			if fget(mget(i, j), flags.ground) then
 				return true
+			end
+		end
+	end
+end
+
+function player.check(self, flag)
+	ox = 0
+	oy = 0
+	for i = flr((self.x + self.hit_x) / 8),flr((self.x + self.hit_x + self.hit_w - 1) / 8) do
+		for j = tile_y(self.y + self.hit_y),tile_y(self.y + self.hit_y + self.hit_h - 1) do
+      local m = mget(i, j)
+			if fget(m, flag) then
+				return {
+          x = i,
+          y = j,
+          spr = m,
+        }
 			end
 		end
 	end
