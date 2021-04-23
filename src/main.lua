@@ -1,5 +1,7 @@
 current_game_state = game_state.intro
 player_pos_y = 0
+camera_x = 0 
+camera_y = 0
 
 function _init()
   music(audio.tracks.intro)
@@ -7,6 +9,8 @@ function _init()
 end
 
 function _update()
+  camera_x = peek2(0x5f28)
+  camera_y = peek2(0x5f2a)
   input:update()
   camera(player.x - 32, player_pos_y)
   if current_game_state == game_state.intro then return update_intro() end
@@ -47,7 +51,8 @@ end
 
 function draw_game()
   cls(12)
-  map(0,0,0,0,128,32)
+  print(camera_x, 0,0)
+  map(0, 0, 0, 0, 128, 32)
   player:draw()
   blocks:draw()
 end
