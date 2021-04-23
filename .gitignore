@@ -10,3 +10,4 @@ sdl_controllers.txt
 activity_log.txt
 *.html
 *.js
+.DS_Store
