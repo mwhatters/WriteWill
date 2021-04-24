@@ -14,6 +14,7 @@
      foot_step = 62,
      slide = 59,
      die = 5,
+     checkpoint = 6,
    },
  }
 
@@ -73,5 +74,5 @@ function approach(x, target, max_delta)
 end
 
 function tile_y(py) 
-  return max(0, min(flr(py / 8), 128 - 1)) 
+  return max(0, min(flr(py / 8), 200 - 1)) 
 end

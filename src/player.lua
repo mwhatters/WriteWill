@@ -342,12 +342,13 @@ function player.after_move(self)
 
   local flag = self:check(flags.checkpoint)
   if flag then
-    sfx(audio.sounds.jump)
+    sfx(audio.sounds.checkpoint)
     self.checkpoint = {
-      x = player.x,
-      y = player.y,
+      x = flag.x,
+      y = flag.y,
     }
     fset(flag.spr, 0)
+    mset(flag.x / 8, flag.y / 8, 9)
   end
 end
 
@@ -424,8 +425,8 @@ function player.check(self, flag)
       local m = mget(i, j)
 			if fget(m, flag) then
 				return {
-          x = i,
-          y = j,
+          x = i * 8,
+          y = j * 8,
           spr = m,
         }
 			end
