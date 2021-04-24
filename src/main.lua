@@ -58,7 +58,7 @@ end
 
 function draw_game()
   cls(12)
-  print(input.jump, player.x, player.y - 5,  8)
+  -- print(input.jump, player.x, player.y - 5,  8)
   -- print(camera_x, player.x, player.y - 10, 8)
   -- print(player.x, player.x, player.y - 15, 9)
   -- print(player.y, player.x, player.y - 20, 9)

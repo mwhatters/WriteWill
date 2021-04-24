@@ -22,6 +22,7 @@ function input.update(self)
   self:decrement_buffers()
   self:update_move_x()
   self.jump = self:get_jump()
+  self.jump_held = btn(buttons.z)
   self.slide = self:get_slide()
 end
 
@@ -36,8 +37,6 @@ end
 function input.get_jump(self)
   if self.jump_cooldown > 0 then return false end
   if btn(buttons.z) then
-    input.jump_held = true
-
     if not input.jump_just_pressed_held then
       input.jump_just_pressed = true
     end
@@ -48,7 +47,6 @@ function input.get_jump(self)
       self.jump_buffer = self.buffer_default 
     end
   else
-    input.jump_held = false
     input.jump_just_pressed = false
     input.jump_just_pressed_held = false
   end
@@ -81,7 +79,6 @@ function input.decrement_buffers(self)
   self.slide_buffer = max(0, self.slide_buffer - 1)
   self.jump_cooldown = max(0, self.jump_cooldown - 1)
   self.slide_cooldown = max(0, self.slide_cooldown - 1)
-
 end
 
 function input.consume_jump(self)
